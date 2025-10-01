@@ -1,44 +1,56 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Compass, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Compass, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
+const showText = process.env.NEXT_PUBLIC_SHOW_TEXT === "true";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     // Simulate login process
     setTimeout(() => {
-      setIsLoading(false)
+      setIsLoading(false);
       // Redirect to dashboard or previous page
-      window.location.href = "/"
-    }, 2000)
-  }
+      window.location.href = "/";
+    }, 2000);
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6">
-            <Compass className="w-8 h-8 text-primary-foreground" />
-          </Link>
-          <h1 className="text-2xl font-bold mb-2">歡迎回到 iTone</h1>
-          <p className="text-muted-foreground">登入你的帳戶，繼續你的旅行社交之旅</p>
+          {showText && (
+            <>
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6"
+              >
+                <Compass className="w-8 h-8 text-primary-foreground" />
+              </Link>
+              <h1 className="text-2xl font-bold mb-2">歡迎回到 iTone</h1>
+            </>
+          )}
+          <p className="text-muted-foreground">
+            登入你的帳戶
+            {/* ，繼續你的旅行社交之旅 */}
+          </p>
         </div>
 
         <Card>
@@ -81,7 +93,11 @@ export default function LoginPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -93,7 +109,10 @@ export default function LoginPage() {
                     記住我
                   </Label>
                 </div>
-                <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sm text-primary hover:underline"
+                >
                   忘記密碼？
                 </Link>
               </div>
@@ -107,7 +126,10 @@ export default function LoginPage() {
               <Separator className="my-4" />
               <div className="text-center text-sm text-muted-foreground">
                 還沒有帳戶？{" "}
-                <Link href="/auth/signup" className="text-primary hover:underline font-medium">
+                <Link
+                  href="/auth/signup"
+                  className="text-primary hover:underline font-medium"
+                >
                   立即註冊
                 </Link>
               </div>
@@ -125,5 +147,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
