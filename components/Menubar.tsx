@@ -27,7 +27,15 @@ export default function Menubar({}: MenubarProps) {
           }}
         >
           {/* <FaUser  style={{whiteSpace: "nowrap", color:"white"}} />&nbsp; */}
-
+          <Link href="/tone-discovery">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              開始測試
+            </Button>
+          </Link>
           <Link href="/auth/login">
             <Button
               variant="ghost"

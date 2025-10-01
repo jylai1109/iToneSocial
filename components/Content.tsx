@@ -90,63 +90,57 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-hero-bg via-background to-muted/30">
-        <div className="absolute inset-0 bg-[url('/world-map-travel-footprints.jpg')] bg-cover bg-center opacity-5"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="text-center max-w-5xl mx-auto">
-            <Badge
-              variant="secondary"
-              className="mb-8 text-base px-6 py-3 bg-primary/10 text-primary border-primary/20"
-            >
-              <Globe className="w-5 h-5 mr-2" />
-              {/* 3分鐘發現你的旅行個性 */}
-              工程專案管理系統
-            </Badge>
+      {showText && (
+        <section className="relative overflow-hidden bg-gradient-to-br from-hero-bg via-background to-muted/30">
+          <div className="absolute inset-0 bg-[url('/world-map-travel-footprints.jpg')] bg-cover bg-center opacity-5"></div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+            <div className="text-center max-w-5xl mx-auto">
+              <Badge
+                variant="secondary"
+                className="mb-8 text-base px-6 py-3 bg-primary/10 text-primary border-primary/20"
+              >
+                <Globe className="w-5 h-5 mr-2" />
+                3分鐘發現你的旅行個性
+              </Badge>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-balance mb-8 leading-tight">
-              {/* 找到你的 */}
-              管理所有
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                {" "}
-                {/* 旅行調調 */}
-                工程專案
-              </span>
-              <br />
-              {/* 遇見對味的旅伴 */}
-              請選擇專案
-            </h1>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-balance mb-8 leading-tight">
+                找到你的
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  {" "}
+                  旅行調調
+                </span>
+                <br />
+                遇見對味的旅伴
+              </h1>
 
-            <p className="text-xl md:text-2xl text-muted-foreground text-pretty mb-12 max-w-3xl mx-auto leading-relaxed">
-              {/* 完成我們的3分鐘旅行調性測試，發現你的旅行個性， */}
-              京華廣場頂級商辦園區
-              <br className="hidden md:block" />
-              {/* 然後加入 iTone 社群，遇見志同道合的旅行夥伴 */}
-              開始日期： 2022/12/01~ 結束日期： 2028/07/01
-            </p>
-            {showText && (
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-                <Link href="/tone-discovery">
+              <p className="text-xl md:text-2xl text-muted-foreground text-pretty mb-12 max-w-3xl mx-auto leading-relaxed">
+                完成我們的3分鐘旅行調性測試，發現你的旅行個性，
+                <br className="hidden md:block" />
+                然後加入 iTone 社群，遇見志同道合的旅行夥伴
+              </p>
+              {showText && (
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                  <Link href="/tone-discovery">
+                    <Button
+                      size="lg"
+                      className="px-12 py-4 text-xl bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-xl transform hover:scale-105 transition-all duration-200"
+                    >
+                      立即開始測試
+                      <ArrowRight className="w-6 h-6 ml-2" />
+                    </Button>
+                  </Link>
                   <Button
+                    variant="outline"
                     size="lg"
-                    className="px-12 py-4 text-xl bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-xl transform hover:scale-105 transition-all duration-200"
+                    className="px-8 py-4 text-lg bg-transparent border-2 hover:bg-muted/50"
                   >
-                    立即開始測試
-                    <ArrowRight className="w-6 h-6 ml-2" />
+                    <Play className="w-5 h-5 mr-2" />
+                    觀看介紹影片
                   </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="px-8 py-4 text-lg bg-transparent border-2 hover:bg-muted/50"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  觀看介紹影片
-                </Button>
-              </div>
-            )}
+                </div>
+              )}
 
-            {/* Hero Stats */}
-            {showText && (
+              {/* Hero Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
                 <div className="text-center">
                   <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
@@ -158,16 +152,14 @@ export default function HomePage() {
                   <div className="text-3xl md:text-4xl font-bold text-accent mb-2">
                     6種
                   </div>
-                  <div className="text-muted-foreground">
-                    {/* 旅行調性 */}工程專案
-                  </div>
+                  <div className="text-muted-foreground">{/* 旅行調性 */}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
                     92%
                   </div>
                   <div className="text-muted-foreground">
-                    {/* 配對成功率 */}請選擇專案
+                    {/* 配對成功率 */}
                   </div>
                 </div>
                 <div className="text-center">
@@ -177,10 +169,43 @@ export default function HomePage() {
                   <div className="text-muted-foreground">完成測試</div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {!showText && (
+        <section className="relative overflow-hidden bg-gradient-to-br from-hero-bg via-background to-muted/30">
+          <div className="absolute inset-0 bg-cover bg-center opacity-5"></div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+            <div className="text-center max-w-5xl mx-auto">
+              <Badge
+                variant="secondary"
+                className="mb-8 text-base px-6 py-3 bg-primary/10 text-primary border-primary/20"
+              >
+                <Globe className="w-5 h-5 mr-2" />
+                工程專案管理系統
+              </Badge>
+
+              <h1 className="text-1xl md:text-3xl lg:text-5xl font-bold text-balance mb-8 leading-tight">
+                管理所有
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  {" "}
+                  工程專案
+                </span>
+                <br />
+                請選擇專案
+              </h1>
+
+              <p className="text-xl md:text-2xl text-muted-foreground text-pretty mb-12 max-w-3xl mx-auto leading-relaxed">
+                京華廣場頂級商辦園區
+                <br className="hidden md:block" />
+                開始日期： 2022/12/01~ 結束日期： 2028/07/01
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* About the Test Section */}
       {showText && (

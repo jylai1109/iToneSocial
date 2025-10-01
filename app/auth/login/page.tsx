@@ -126,12 +126,22 @@ export default function LoginPage() {
               <Separator className="my-4" />
               <div className="text-center text-sm text-muted-foreground">
                 還沒有帳戶？{" "}
-                <Link
-                  href="/auth/signup"
-                  className="text-primary hover:underline font-medium"
-                >
-                  立即註冊
-                </Link>
+                {showText && (
+                  <Link
+                    href="/auth/signup"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    立即註冊
+                  </Link>
+                )}
+                {!showText && (
+                  <Link
+                    href="/auth/signup_pmis"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    立即註冊
+                  </Link>
+                )}
               </div>
             </div>
           </CardContent>
