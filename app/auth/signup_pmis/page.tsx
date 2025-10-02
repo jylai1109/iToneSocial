@@ -2,7 +2,10 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import config from "@/config"; // 在 config.ts
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,6 +29,10 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
+import { title } from "process";
+
+import type { TeamGroup, TeamOrganization } from "@/types/model_type";
+import type { ApiResponse } from "@/types/apiResponse";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -36,9 +43,44 @@ export default function SignupPage() {
     company: "",
     title: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [groups, setGroups] = useState<TeamOrganization[]>([]);
+
+  async function loadGroupsApi(): Promise<ApiResponse<TeamOrganization[]>> {
+    const res = await fetch(`${config.API_BASE_URL}/Account/LoadOrganization`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+
+    return await res.json();
+  }
+
+  useEffect(() => {
+    // loadGroups();
+    async function fetchGroups() {
+      try {
+        const response = await loadGroupsApi();
+        if (response.status === "success" && response.GroupList) {
+          setGroups(response.GroupList); // ✅ 這裡直接拿 data (就是 TeamGroup[])
+        } else {
+          //toast.error("讀取失敗");
+        }
+      } catch (err) {
+        console.error("API 錯誤:", err);
+        //toast.error("讀取群組失敗");
+      }
+    }
+    //fetchGroups();
+  }, []); // 空陣列 = 只在第一次掛載跑
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -52,14 +94,44 @@ export default function SignupPage() {
       return;
     }
 
-    setIsLoading(true);
+    try {
+      const res = await fetch(`${config.API_BASE_URL}/Account/Register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userName: formData.name,
+          password: formData.password,
+          email: formData.email,
+          company: formData.company,
+          title: formData.title,
+        }),
+      });
+
+      if (res.ok) {
+        alert("註冊成功！");
+        // 註冊成功後導向
+        // window.location.href = "/tone-discovery";
+      } else {
+        const err = await res.text();
+        alert("註冊失敗: " + err);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("發生錯誤，請稍後再試");
+    } finally {
+      setIsLoading(false);
+    }
+
+    // setIsLoading(true);
 
     // Simulate signup process
-    setTimeout(() => {
+    /* setTimeout(() => {
       setIsLoading(false);
       // Redirect to tone discovery
       window.location.href = "/tone-discovery";
-    }, 2000);
+    }, 2000); */
   };
 
   return (
