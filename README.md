@@ -34,3 +34,39 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+部署：
+-- npm run build
+
+Next.js 會執行 next build，這個指令會：
+
+編譯 TypeScript / JSX
+
+把 .tsx / .ts → 轉成瀏覽器能跑的 JavaScript
+
+這個過程使用 Webpack (Next.js 12) 或 Turbopack (Next.js 13+ 測試版)
+
+最佳化資源
+
+做 程式碼分割 (Code Splitting)
+
+壓縮 / 最小化 JS 和 CSS
+
+預處理圖片與字體
+
+生成伺服端渲染 (SSR) 與靜態頁 (SSG)
+
+如果頁面用了 getStaticProps → 會在 build 階段生成 HTML
+
+如果用了 getServerSideProps → 保留成伺服端渲染邏輯，等待 runtime 執行
+
+輸出結果到 .next/ 資料夾
+
+這就是 Next.js 的「編譯後輸出」目錄
+
+-- npx next export
+要 做靜態網站：
+需要跑 npx next export，把 .next/ 轉成純 HTML + JS，放到 out/
+
+從 Next.js 13.3 之後，官方移除了 npx next export 這個指令。
+要做「靜態匯出 (Static Export)」時，不再使用指令，而是要在 next.config.js 裡設定：
