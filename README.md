@@ -64,9 +64,7 @@ Next.js 會執行 next build，這個指令會：
 
 這就是 Next.js 的「編譯後輸出」目錄
 
--- npx next export
-要 做靜態網站：
-需要跑 npx next export，把 .next/ 轉成純 HTML + JS，放到 out/
-
-從 Next.js 13.3 之後，官方移除了 npx next export 這個指令。
-要做「靜態匯出 (Static Export)」時，不再使用指令，而是要在 next.config.js 裡設定：
+-- 部暑：
+npm run build:deploy
+D:\work\Projects\iToneSocial\ExportFix.ps1
+這邊已經寫好處理路徑，然後將 html 搬到各自資料夾變成 index
