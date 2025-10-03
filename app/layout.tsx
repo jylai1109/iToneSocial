@@ -4,6 +4,9 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { AlertDialogProvider } from "@/hooks/use-alert-dialog";
+import { ConfirmDialogProvider } from "@/hooks/use-confirm-dialog";
 import "./globals.css";
 
 /* export const metadata: Metadata = {
@@ -28,8 +31,13 @@ export default function RootLayout({
       <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
-        <Suspense fallback={null}>{children}</Suspense>
-        <Analytics />
+        <AlertDialogProvider>
+          <ConfirmDialogProvider>
+            <Suspense fallback={null}>{children}</Suspense>
+            <Analytics />
+            <Toaster /> {/* 👈 這裡一定要加，toast 才會出現 */}
+          </ConfirmDialogProvider>
+        </AlertDialogProvider>
       </body>
     </html>
   );

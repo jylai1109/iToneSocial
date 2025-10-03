@@ -28,6 +28,11 @@ import {
   MapPin,
   ArrowLeft,
 } from "lucide-react";
+
+import { toast } from "@/hooks/use-toast";
+import { useAlertDialog } from "@/hooks/use-alert-dialog";
+import { useConfirmDialog } from "@/hooks/use-confirm-dialog";
+
 import Link from "next/link";
 import { title } from "process";
 
@@ -35,6 +40,9 @@ import type { TeamGroup, TeamOrganization } from "@/types/model_type";
 import type { ApiResponse } from "@/types/apiResponse";
 
 export default function SignupPage() {
+  const showAlert = useAlertDialog();
+  const showConfirm = useConfirmDialog();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,9 +55,8 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [groups, setGroups] = useState<TeamOrganization[]>([]);
 
-  async function loadGroupsApi(): Promise<ApiResponse<TeamOrganization[]>> {
+  async function loadOrgApi(): Promise<ApiResponse<TeamOrganization[]>> {
     const res = await fetch(`${config.API_BASE_URL}/Account/LoadOrganization`, {
       method: "POST",
       headers: {
@@ -64,13 +71,15 @@ export default function SignupPage() {
     return await res.json();
   }
 
+  const [OrganizationList, setOrgs] = useState<TeamOrganization[]>([]);
+
   useEffect(() => {
-    // loadGroups();
-    async function fetchGroups() {
+    async function fetchOrgs() {
       try {
-        const response = await loadGroupsApi();
-        if (response.status === "success" && response.GroupList) {
-          setGroups(response.GroupList); // ✅ 這裡直接拿 data (就是 TeamGroup[])
+        const response = await loadOrgApi();
+        //debugger;
+        if (response.status === "success" && response.TeamOrganizationList) {
+          setOrgs(response.TeamOrganizationList); // ✅ 這裡直接拿 data (就是 TeamGroup[])
         } else {
           //toast.error("讀取失敗");
         }
@@ -79,7 +88,7 @@ export default function SignupPage() {
         //toast.error("讀取群組失敗");
       }
     }
-    //fetchGroups();
+    fetchOrgs();
   }, []); // 空陣列 = 只在第一次掛載跑
 
   const handleInputChange = (field: string, value: string) => {
@@ -88,6 +97,9 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!(await showConfirm("確定要註冊嗎？", "警告"))) {
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       alert("密碼確認不符");
@@ -110,16 +122,17 @@ export default function SignupPage() {
       });
 
       if (res.ok) {
-        alert("註冊成功！");
+        await showAlert("註冊成功！", "您的資料已經儲存。");
+        toast.success("註冊成功！", "您的資料已經儲存。");
         // 註冊成功後導向
         // window.location.href = "/tone-discovery";
       } else {
         const err = await res.text();
-        alert("註冊失敗: " + err);
+        toast.error("註冊失敗: " + err);
       }
     } catch (err) {
       console.error(err);
-      alert("發生錯誤，請稍後再試");
+      toast.error("發生錯誤，請稍後再試");
     } finally {
       setIsLoading(false);
     }
@@ -202,19 +215,24 @@ export default function SignupPage() {
                         <SelectValue placeholder="選擇公司" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="0">鼎越開發股份有限公司</SelectItem>
+                        {OrganizationList.map((tb, i) => (
+                          <SelectItem key={i} value={tb.Dept_id.toString()}>
+                            {tb.Company}
+                            {tb.DeptName ? `-${tb.DeptName}` : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                {/* <SelectItem value="0">鼎越開發股份有限公司</SelectItem>
                         <SelectItem value="1">
                           李祖原聯合建築師事務所
                         </SelectItem>
                         <SelectItem value="2">
                           華熊營造工程股份有限公司
                         </SelectItem>
-                        <SelectItem value="3">兆申機電工程有限公司</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
+                        <SelectItem value="3">兆申機電工程有限公司</SelectItem> */}
                 <div className="space-y-2">
                   <Label htmlFor="title">職稱</Label>
                   <Input
