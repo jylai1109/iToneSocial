@@ -139,7 +139,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">;
 
-function toast({ ...props }: Toast) {
+function notify({ ...props }: Toast) {
   const id = genId();
 
   const update = (props: ToasterToast) =>
@@ -183,14 +183,14 @@ function useToast() {
 
   return {
     ...state,
-    toast,
+    notify,
     dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
   };
 }
 
 // 快捷方法
-toast.success = (message: string, description?: string) => {
-  return toast({
+notify.success = (message: string, description?: string) => {
+  return notify({
     title: message,
     description,
     // 這裡也可以傳 variant，讓 UI 自動改樣式
@@ -198,28 +198,28 @@ toast.success = (message: string, description?: string) => {
   } as any);
 };
 
-toast.error = (message: string, description?: string) => {
-  return toast({
+notify.error = (message: string, description?: string) => {
+  return notify({
     title: message,
     description,
-    variant: "destructive",
+    variant: "error",
   } as any);
 };
 
-toast.info = (message: string, description?: string) => {
-  return toast({
+notify.info = (message: string, description?: string) => {
+  return notify({
     title: message,
     description,
     variant: "info",
   } as any);
 };
 
-toast.warning = (message: string, description?: string) => {
-  return toast({
+notify.warning = (message: string, description?: string) => {
+  return notify({
     title: message,
     description,
     variant: "warning",
   } as any);
 };
 
-export { useToast, toast };
+export { useToast, notify };

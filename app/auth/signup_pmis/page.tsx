@@ -29,7 +29,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-import { toast } from "@/hooks/use-toast";
+import { notify } from "@/hooks/use-toast";
 import { useAlertDialog } from "@/hooks/use-alert-dialog";
 import { useConfirmDialog } from "@/hooks/use-confirm-dialog";
 
@@ -81,11 +81,11 @@ export default function SignupPage() {
         if (response.status === "success" && response.TeamOrganizationList) {
           setOrgs(response.TeamOrganizationList); // ✅ 這裡直接拿 data (就是 TeamGroup[])
         } else {
-          //toast.error("讀取失敗");
+          notify.error("讀取失敗");
         }
       } catch (err) {
         console.error("API 錯誤:", err);
-        //toast.error("讀取群組失敗");
+        notify.error("讀取群組失敗");
       }
     }
     fetchOrgs();
@@ -97,12 +97,15 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!(await showConfirm("確定要註冊嗎？", "警告"))) {
+    /* if (!(await showConfirm("確定要註冊嗎？", "警告"))) {
       return;
-    }
+    } */
 
     if (formData.password !== formData.confirmPassword) {
-      alert("密碼確認不符");
+      /* notify.success("密碼確認不符");
+      notify.warning("密碼確認不符");
+      notify.info("密碼確認不符"); */
+      notify.error("密碼確認不符");
       return;
     }
 
@@ -122,17 +125,17 @@ export default function SignupPage() {
       });
 
       if (res.ok) {
-        await showAlert("註冊成功！", "您的資料已經儲存。");
-        toast.success("註冊成功！", "您的資料已經儲存。");
+        await showAlert("註冊成功！ 請重新登入。", "註冊成功！");
+        // notify.success("註冊成功！", "您的資料已經儲存。");
         // 註冊成功後導向
-        // window.location.href = "/tone-discovery";
+        window.location.href = "/auth/login";
       } else {
         const err = await res.text();
-        toast.error("註冊失敗: " + err);
+        notify.error("註冊失敗: " + err);
       }
     } catch (err) {
       console.error(err);
-      toast.error("發生錯誤，請稍後再試");
+      notify.error("發生錯誤，請稍後再試");
     } finally {
       setIsLoading(false);
     }

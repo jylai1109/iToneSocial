@@ -48,7 +48,7 @@ export default function LoginPage() {
             </>
           )}
           <p className="text-muted-foreground">
-            登入你的帳戶
+            {/* 登入你的帳戶 */}
             {/* ，繼續你的旅行社交之旅 */}
           </p>
         </div>
