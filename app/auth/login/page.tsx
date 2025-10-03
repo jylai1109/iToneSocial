@@ -3,6 +3,9 @@
 import type React from "react";
 
 import { useState } from "react";
+
+import config from "@/config";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,9 +14,14 @@ import { Separator } from "@/components/ui/separator";
 import { Compass, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+import { useAlertDialog } from "@/hooks/use-alert-dialog";
+import { notify } from "@/hooks/use-toast";
+
 const showText = process.env.NEXT_PUBLIC_SHOW_TEXT === "true";
 
 export default function LoginPage() {
+  const showAlert = useAlertDialog();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -23,36 +31,71 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
+    try {
+      setIsLoading(true);
+
+      const res = await fetch(`${config.API_BASE_URL}/Account/DoLogin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      if (res.ok) {
+        await showAlert("登入成功！", "登入成功！");
+        // 登入成功後導向首頁
+        window.location.href = "/";
+      } else {
+        try {
+          // 嘗試解析 JSON
+          const errObj = await res.json();
+          notify.error(
+            "登入失敗: " + (errObj.message ?? JSON.stringify(errObj))
+          );
+        } catch {
+          // 如果不是 JSON，退回純文字
+          const errText = await res.text();
+          notify.error("登入失敗: " + errText);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      notify.error("發生錯誤，請稍後再試");
+    } finally {
+      setIsLoading(false);
+    }
+
     // Simulate login process
-    setTimeout(() => {
+    /* setTimeout(() => {
       setIsLoading(false);
       // Redirect to dashboard or previous page
       window.location.href = "/";
-    }, 2000);
+    }, 2000); */
   };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
-        <div className="text-center mb-8">
-          {showText && (
-            <>
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6"
-              >
-                <Compass className="w-8 h-8 text-primary-foreground" />
-              </Link>
-              <h1 className="text-2xl font-bold mb-2">歡迎回到 iTone</h1>
-            </>
-          )}
-          <p className="text-muted-foreground">
-            {/* 登入你的帳戶 */}
-            {/* ，繼續你的旅行社交之旅 */}
-          </p>
-        </div>
+        {showText && (
+          <div className="text-center mb-8">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6"
+            >
+              <Compass className="w-8 h-8 text-primary-foreground" />
+            </Link>
+            <h1 className="text-2xl font-bold mb-2">歡迎回到 iTone</h1>
 
+            <p className="text-muted-foreground">
+              登入你的帳戶 ，繼續你的旅行社交之旅
+            </p>
+          </div>
+        )}
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-xl text-center">登入帳戶</CardTitle>

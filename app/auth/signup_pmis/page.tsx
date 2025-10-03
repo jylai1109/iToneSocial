@@ -110,6 +110,8 @@ export default function SignupPage() {
     }
 
     try {
+      setIsLoading(true);
+
       const res = await fetch(`${config.API_BASE_URL}/Account/Register`, {
         method: "POST",
         headers: {
@@ -139,8 +141,6 @@ export default function SignupPage() {
     } finally {
       setIsLoading(false);
     }
-
-    // setIsLoading(true);
 
     // Simulate signup process
     /* setTimeout(() => {
