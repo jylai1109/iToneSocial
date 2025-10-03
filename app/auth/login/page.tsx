@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import config from "@/config";
 
@@ -20,6 +20,13 @@ import { notify } from "@/hooks/use-toast";
 const showText = process.env.NEXT_PUBLIC_SHOW_TEXT === "true";
 
 export default function LoginPage() {
+  useEffect(() => {
+    fetch(`${config.API_BASE_URL}/Account/CheckCookie`, {
+      method: "GET",
+      credentials: "include", // ⚠️ 必須要有
+    });
+  }, []); // 空陣列 = 只在第一次掛載跑
+
   const showAlert = useAlertDialog();
 
   const [email, setEmail] = useState("");

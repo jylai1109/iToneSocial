@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "devs": "next dev --experimental-https --turbopack",
     "build": "next build",
     "build-turbo": "next build --turbopack",
     "start": "next start",
